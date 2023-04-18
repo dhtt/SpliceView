@@ -15,8 +15,12 @@ nextflow.enable.dsl = 2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-params.fasta = WorkflowMain.getGenomeAttribute(params, 'fasta')
-
+params.fasta                 = WorkflowMain.getGenomeAttribute(params, 'fasta')
+params.gtf                   = WorkflowMain.getGenomeAttribute(params, 'gtf')
+params.star_ignore_sjdbgtf   = WorkflowMain.getGenomeAttribute(params, 'star_ignore_sjdbgtf')
+params.seq_platform          = WorkflowMain.getGenomeAttribute(params, 'seq_platform')
+params.ch_seq_center         = WorkflowMain.getGenomeAttribute(params, 'ch_seq_center')
+params.extra_star_align_args = WorkflowMain.getGenomeAttribute(params, 'extra_star_align_args')
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     VALIDATE & PRINT PARAMETER SUMMARY

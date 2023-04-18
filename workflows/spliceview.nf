@@ -16,7 +16,8 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-
+ch_fasta = file(params.fasta)
+ch_gtf   = file(params.gtf)
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     CONFIG FILES
@@ -50,6 +51,10 @@ include { INPUT_CHECK } from '../subworkflows/local/input_check'
 //
 include { FASTQC                      } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
+include { CUTADAPT                    } from '../modules/nf-core/cutadapt/main'  
+include { STAR_GENOMEGENERATE         } from '../modules/nf-core/star/genomegenerate/main'    
+include { STAR_ALIGN                  } from '../modules/nf-core/star/align/main'  
+include { SAMTOOLS_INDEX              } from '../modules/nf-core/samtools/index/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 
 /*
@@ -80,6 +85,58 @@ workflow SPLICEVIEW {
         INPUT_CHECK.out.reads
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+
+    //
+    // MODULE: CUTADAPT
+    //
+    ch_reads = Channel.empty()
+    CUTADAPT (
+        INPUT_CHECK.out.reads
+    )    
+    ch_reads = CUTADAPT.out.reads
+    ch_versions = ch_versions.mix(CUTADAPT.out.versions)
+
+    //
+    // MODULE: STAR GENOME GENERATE
+    //
+    ch_star_index = Channel.empty()
+    STAR_GENOMEGENERATE ( 
+        ch_fasta, 
+        ch_gtf 
+    )    
+    ch_star_index = STAR_GENOMEGENERATE.out.index
+    ch_versions = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
+
+    //
+    // MODULE: STAR ALIGN
+    //
+    ch_bam_file         = Channel.empty()
+    ch_bam_sorted_file  = Channel.empty()
+    star_ignore_sjdbgtf = Channel.value(params.star_ignore_sjdbgtf)
+    ch_seq_platform     = Channel.value(params.seq_platform)
+    ch_seq_center       = Channel.value(params.seq_center)
+    STAR_ALIGN (
+        ch_reads,
+        ch_star_index,
+        ch_gtf,
+        star_ignore_sjdbgtf,
+        ch_seq_platform,
+        ch_seq_center
+    )    
+    ch_bam_file = STAR_ALIGN.out.bam
+    ch_bam_sorted_file = STAR_ALIGN.out.bam_sorted
+    ch_versions = ch_versions.mix(STAR_ALIGN.out.versions)
+
+    //
+    // MODULE: SAMTOOL INDEX
+    //
+    ch_bai_file = Channel.empty()
+    star_ignore_sjdbgtf = Channel.value(params.star_ignore_sjdbgtf)
+    SAMTOOLS_INDEX (
+        ch_bam_sorted_file
+    )    
+    ch_bai_file = SAMTOOLS_INDEX.out.bai
+    ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
