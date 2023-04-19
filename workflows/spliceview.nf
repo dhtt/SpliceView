@@ -16,8 +16,7 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-ch_fasta = file(params.fasta)
-ch_gtf   = file(params.gtf)
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     CONFIG FILES
@@ -49,6 +48,7 @@ include { INPUT_CHECK } from '../subworkflows/local/input_check'
 //
 // MODULE: Installed directly from nf-core/modules
 //
+include { GUNZIP                      } from '../modules/nf-core/gunzip/main'
 include { FASTQC                      } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUTADAPT                    } from '../modules/nf-core/cutadapt/main'  
@@ -69,6 +69,22 @@ def multiqc_report = []
 workflow SPLICEVIEW {
 
     ch_versions = Channel.empty()
+
+    fasta = params.fasta
+    if (fasta.endsWith('.gz')) {
+        ch_fasta    = GUNZIP ( [ [:], fasta ] ).gunzip.map { it[1] }
+        ch_versions = ch_versions.mix(GUNZIP.out.versions)
+    } else {
+        ch_fasta = file(fasta)
+    }
+    
+    gtf = params.gtf
+    if (gtf.endsWith('.gz')) {
+        ch_gtf      = GUNZIP ( [ [:], gtf ] ).gunzip.map { it[1] }
+        ch_versions = ch_versions.mix(GUNZIP.out.versions)
+    } else {
+        ch_gtf = file(gtf)
+    }
 
     //
     // SUBWORKFLOW: Read in samplesheet, validate and stage input files
@@ -99,7 +115,7 @@ workflow SPLICEVIEW {
     //
     // MODULE: STAR GENOME GENERATE
     //
-    ch_star_index = Channel.empty()
+    ch_star_index = Channel.empty()    
     STAR_GENOMEGENERATE ( 
         ch_fasta, 
         ch_gtf 
