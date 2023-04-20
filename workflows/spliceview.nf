@@ -129,15 +129,13 @@ workflow SPLICEVIEW {
     ch_bam_file         = Channel.empty()
     ch_bam_sorted_file  = Channel.empty()
     star_ignore_sjdbgtf = Channel.value(params.star_ignore_sjdbgtf)
-    ch_seq_platform     = Channel.value(params.seq_platform)
-    ch_seq_center       = Channel.value(params.seq_center)
     STAR_ALIGN (
         ch_reads,
         ch_star_index,
         ch_gtf,
         star_ignore_sjdbgtf,
-        ch_seq_platform,
-        ch_seq_center
+        '',
+        params.seq_center ?: ''
     )    
     ch_bam_file = STAR_ALIGN.out.bam
     ch_bam_sorted_file = STAR_ALIGN.out.bam_sorted
