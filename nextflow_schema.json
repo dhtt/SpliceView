@@ -22,6 +22,12 @@
                     "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.",
                     "fa_icon": "fas fa-file-csv"
                 },
+                "sra_number": {
+                    "type": "string",
+                    "description": "SRA number of the experiment to be downloaded and analysed",
+                    "help_text": "SRA number should start with SRR.",
+                    "fa_icon": "fas fa-sra"
+                },
                 "outdir": {
                     "type": "string",
                     "format": "directory-path",

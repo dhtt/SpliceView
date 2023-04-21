@@ -35,6 +35,16 @@
                         "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
                         "installed_by": ["modules"]
                     },
+                    "sratools/fasterqdump": {
+                        "branch": "master",
+                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"]
+                    },
+                    "sratools/prefetch": {
+                        "branch": "master",
+                        "git_sha": "cded1570b7cb0ea128a5c89dd6ec3a62035c1526",
+                        "installed_by": ["modules"]
+                    },
                     "star/align": {
                         "branch": "master",
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",

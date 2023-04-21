@@ -36,13 +36,15 @@ WorkflowMain.initialise(workflow, params, log)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { SPLICEVIEW } from './workflows/spliceview'
+include { FASTQ_FROM_SRA } from './workflows/fastq_from_sra'
+// include { SPLICEVIEW } from './workflows/spliceview'
 
 //
 // WORKFLOW: Run main zbi/spliceview analysis pipeline
 //
 workflow ZBI_SPLICEVIEW {
-    SPLICEVIEW ()
+    FASTQ_FROM_SRA()
+    // SPLICEVIEW ()
 }
 
 /*
@@ -56,7 +58,8 @@ workflow ZBI_SPLICEVIEW {
 // See: https://github.com/nf-core/rnaseq/issues/619
 //
 workflow {
-    ZBI_SPLICEVIEW ()
+    FASTQ_FROM_SRA()
+    // ZBI_SPLICEVIEW ()
 }
 
 /*
