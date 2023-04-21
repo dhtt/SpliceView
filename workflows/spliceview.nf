@@ -115,20 +115,31 @@ workflow SPLICEVIEW {
     //
     // MODULE: STAR GENOME GENERATE
     //
-    ch_star_index = Channel.empty()    
-    STAR_GENOMEGENERATE ( 
-        ch_fasta, 
-        ch_gtf 
-    )    
-    ch_star_index = STAR_GENOMEGENERATE.out.index
-    ch_versions = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
+    star_index = params.star_index
+    ch_star_index = Channel.empty()
+    if (star_index) {
+        if (star_index.endsWith('.tar.gz')) {
+            ch_star_index = UNTAR_STAR_INDEX ( [ [:], star_index ] ).untar.map { it[1] }
+            ch_versions   = ch_versions.mix(UNTAR_STAR_INDEX.out.versions)
+        } else {
+            ch_star_index = Channel.value(file(star_index))
+        }
+    } else {
+        STAR_GENOMEGENERATE ( 
+            ch_fasta, 
+            ch_gtf 
+        )    
+        ch_star_index = STAR_GENOMEGENERATE.out.index
+        ch_versions = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
+    }
 
     //
     // MODULE: STAR ALIGN
     //
-    ch_bam_file         = Channel.empty()
-    ch_bam_sorted_file  = Channel.empty()
-    star_ignore_sjdbgtf = Channel.value(params.star_ignore_sjdbgtf)
+    ch_aligned_reads         = Channel.empty()
+    ch_aligned_sorted_reads  = Channel.empty()
+    star_ignore_sjdbgtf      = Channel.value(params.star_ignore_sjdbgtf)
+
     STAR_ALIGN (
         ch_reads,
         ch_star_index,
@@ -137,19 +148,19 @@ workflow SPLICEVIEW {
         '',
         params.seq_center ?: ''
     )    
-    ch_bam_file = STAR_ALIGN.out.bam
-    ch_bam_sorted_file = STAR_ALIGN.out.bam_sorted
+    ch_aligned_reads = STAR_ALIGN.out.bam
+    ch_aligned_sorted_reads = STAR_ALIGN.out.bam_sorted
     ch_versions = ch_versions.mix(STAR_ALIGN.out.versions)
 
     //
     // MODULE: SAMTOOL INDEX
     //
-    ch_bai_file = Channel.empty()
+    ch_aligned_sorted_reads_index = Channel.empty()
     star_ignore_sjdbgtf = Channel.value(params.star_ignore_sjdbgtf)
     SAMTOOLS_INDEX (
-        ch_bam_sorted_file
+        ch_aligned_sorted_reads
     )    
-    ch_bai_file = SAMTOOLS_INDEX.out.bai
+    ch_aligned_sorted_reads_index = SAMTOOLS_INDEX.out.bai
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
 
     CUSTOM_DUMPSOFTWAREVERSIONS (

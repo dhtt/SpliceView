@@ -101,6 +101,12 @@
             "fa_icon": "fas fa-dna",
             "description": "Reference genome related files and options required for the workflow.",
             "properties": {
+                "star_index": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-bezier-curve",
+                    "description": "Path to directory or tar.gz archive for pre-built STAR index."
+                },
                 "star_ignore_sjdbgtf": {
                     "type": "string",
                     "description": "Name of iGenomes reference.",
