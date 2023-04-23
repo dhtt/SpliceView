@@ -20,11 +20,14 @@ process FASTQ_DIR_TO_SAMPLESHEET {
 
     script: // This script is bundled with the pipeline, in zbi/spliceview/bin/
     // def samplesheet_dir = ${fastq_dir}/samplesheet.csv
+    def args = task.ext.args ?: ''
+    def fastq_dir = task.ext.prefix ?: "${fastq_dir}"
     """
     fastq_dir_to_samplesheet.py \\
         $fastq_dir \\
         samplesheet.csv \\
         -r1 $read1_extension \\
-        -r2 $read2_extension
+        -r2 $read2_extension \\
+        $args
     """
 }

@@ -43,6 +43,11 @@
                     "fa_icon": "fas fa-book",
                     "help_text": "The fastq file for read 1 (forward strand) should be named in the following format: samplename_2.fastq.gz"
                 },
+                "fastq_dir_to_samplesheet_args": {
+                    "type": "string",
+                    "description": "Extra arguments to pass to FASTQ_DIR_TO_SAMPLESHEET.",
+                    "fa_icon": "fas fa-plus"
+                },
                 "outdir": {
                     "type": "string",
                     "format": "directory-path",
