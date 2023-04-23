@@ -22,6 +22,7 @@ params.star_ignore_sjdbgtf   = WorkflowMain.getGenomeAttribute(params, 'star_ign
 params.seq_platform          = WorkflowMain.getGenomeAttribute(params, 'seq_platform')
 params.seq_center            = WorkflowMain.getGenomeAttribute(params, 'seq_center')
 params.extra_star_align_args = WorkflowMain.getGenomeAttribute(params, 'extra_star_align_args')
+params.fastq_dir_to_samplesheet_args = WorkflowMain.getGenomeAttribute(params, 'fastq_dir_to_samplesheet_args')
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     VALIDATE & PRINT PARAMETER SUMMARY
