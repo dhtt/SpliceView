@@ -47,31 +47,32 @@ Start running your own analysis!
 
 #### I. Check for pipeline requirements
 ##### 1. Working directory setup
-🏠**/home/trang/**
-┣ 📦SpliceView
-┣ 📦TEST
-┃  ┣ 📂genomes
-┃  ┃ ┗ 📂mm10
-┃  ┣ 📂mRNA_seq
-┃  ┃ ┗ 📂raw_files
-┃  ┃ ┃ ┣ 📂testdata
-┃  ┃ ┃ ┃ ┣ 📜samplesheet.csv
-┃  ┃ ┃ ┃ ┣ 📜test1_1.fastq.gz
-┃  ┃ ┃ ┃ ┗ 📜test1_2.fastq.gz
-┃  ┣ 📂spliceview_testdata
-┃  ┃ ┣ 📂cutadapt
-┃  ┃ ┣ 📂fastqc
-┃  ┃ ┣ 📂genomes
-┃  ┃ ┃ ┗ 📂mm10
-┃  ┃ ┃ ┃ ┗ 📂star
-┃  ┃ ┣ 📂multiqc
-┃  ┃ ┃ ┣ 📂multiqc_data
-┃  ┃ ┃ ┗ 📜multiqc_report.html
-┃  ┃ ┣ 📂pipeline_info
-┃  ┃ ┣ 📂star_align_log
-┃  ┃ ┗ 📂star_align_result
-┃  ┃ ┃ ┣ 📜**test1_T1.Aligned.sortedByCoord.out.bam**
+🏠**/home/trang/**\
+┣ 📦SpliceView\
+┣ 📦TEST\
+┃  ┣ 📂genomes\
+┃  ┃ ┗ 📂mm10\
+┃  ┣ 📂mRNA_seq\
+┃  ┃ ┗ 📂raw_files\
+┃  ┃ ┃ ┣ 📂testdata\
+┃  ┃ ┃ ┃ ┣ 📜samplesheet.csv\
+┃  ┃ ┃ ┃ ┣ 📜test1_1.fastq.gz\
+┃  ┃ ┃ ┃ ┗ 📜test1_2.fastq.gz\
+┃  ┣ 📂spliceview_testdata\
+┃  ┃ ┣ 📂cutadapt\
+┃  ┃ ┣ 📂fastqc\
+┃  ┃ ┣ 📂genomes\
+┃  ┃ ┃ ┗ 📂mm10\
+┃  ┃ ┃ ┃ ┗ 📂star\
+┃  ┃ ┣ 📂multiqc\
+┃  ┃ ┃ ┣ 📂multiqc_data\
+┃  ┃ ┃ ┗ 📜multiqc_report.html\
+┃  ┃ ┣ 📂pipeline_info\
+┃  ┃ ┣ 📂star_align_log\
+┃  ┃ ┗ 📂star_align_result\
+┃  ┃ ┃ ┣ 📜**test1_T1.Aligned.sortedByCoord.out.bam**\
 ┃  ┃ ┃ ┗ 📜**test1_T1.Aligned.sortedByCoord.out.bam.bai**
+
 
 ##### 2. Mandatory arguments
 `--input`
