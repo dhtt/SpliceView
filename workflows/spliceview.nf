@@ -15,8 +15,8 @@ def checkPathParamList = [ params.input, params.multiqc_config, params.fasta ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 // Check mandatory parameters
-if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-if (params.input_alt) { ch_input_alt = Channel.of(file(params.input_alt)) } else { exit 1, 'Path to folder containing fastq.gz files is not specified!' }
+// if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
+if (params.input) { ch_input = Channel.of(file(params.input)) } else { exit 1, 'Path to folder containing fastq.gz files is not specified!' }
 if (params.read1_extension) { ch_read1_extension = Channel.of(params.read1_extension) } else { exit 1, 'Read 1 extension is not specified. Do the files for forward reads all end with `_1.fastq.gz`?' }
 if (params.read2_extension) { ch_read2_extension = Channel.of(params.read2_extension) } else { exit 1, 'Read 2 extension is not specified. DO the files for reverse reads all end with `_2.fastq.gz`?' }
 
@@ -93,15 +93,16 @@ workflow SPLICEVIEW {
     //
     // SUBWORKFLOW: Read in samplesheet, validate and stage input files
     //
+    ch_input_samplesheet = Channel.empty()
     FASTQ_DIR_TO_SAMPLESHEET (
-        ch_input_alt,
+        ch_input,
         ch_read1_extension, 
         ch_read2_extension
     )
-    ch_input = FASTQ_DIR_TO_SAMPLESHEET.out.input_table  // #TODO DEFINE input_table IN local subworkflow fastq_dir_to_samplesheet.nf
+    ch_input_samplesheet = FASTQ_DIR_TO_SAMPLESHEET.out.input_table  // #TODO DEFINE input_table IN local subworkflow fastq_dir_to_samplesheet.nf
 
     INPUT_CHECK (
-        ch_input
+        ch_input_samplesheet
     )
     ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
 

@@ -14,20 +14,10 @@
             "properties": {
                 "input": {
                     "type": "string",
-                    "format": "file-path",
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
-                    "schema": "assets/schema_input.json",
-                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.",
-                    "fa_icon": "fas fa-file-csv"
-                },
-                "input_alt": {
-                    "type": "string",
                     "format": "directory-path",
-                    "description": "Path to folder where fastq files are stored.",
+                    "description": "The ABSOLUTE path to folder where fastq files are stored.",
                     "fa_icon": "fas fa-book",
-                    "help_text": "In your terminal, the command `ls input_alt` should show the list fastq files in input_alt folder."
+                    "help_text": "In your terminal, the command `ls input` should show the list fastq files in `input` folder. `input` has to be an absolute path (full directory path given when one navigates to fastq files-folder and run the command `pwd`)."
                 },
                 "read1_extension": {
                     "type": "string",
