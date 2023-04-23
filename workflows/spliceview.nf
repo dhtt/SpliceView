@@ -15,7 +15,16 @@ def checkPathParamList = [ params.input, params.multiqc_config, params.fasta ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 // Check mandatory parameters
-// if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
+// If no reference genome is provided for downloading from iGenome
+if (!params.genome){
+    // If either FASTA/GTF file for genome indexing is missing, exit pipeline
+    if (!params.fasta && !params.gtf){ exit 1, 'Please either (1) Provide the path to FASTA and GTF files for reference genome by defining `fasta` and `gtf` parameters, or (2) Specify a reference genome for retrieving from iGenome by defining `genome`.' } 
+}
+else {
+    // If both reference genome for iGenome download and FASTA/GTF files are provided, give warning for using iGenome version
+    if (params.fasta && params.gtf){ printf('Both reference genome for iGenome download and user-defined paths to FASTA/GTF exist. Please define only `genome` parameter to use iGenome version, or `fasta` and `gtf` parameters to define paths to user`s reference genome files. Now using reference genome version from iGenome') }
+}
+
 if (params.input) { ch_input = Channel.of(file(params.input)) } else { exit 1, 'Path to folder containing fastq.gz files is not specified!' }
 if (params.read1_extension) { ch_read1_extension = Channel.of(params.read1_extension) } else { exit 1, 'Read 1 extension is not specified. Do the files for forward reads all end with `_1.fastq.gz`?' }
 if (params.read2_extension) { ch_read2_extension = Channel.of(params.read2_extension) } else { exit 1, 'Read 2 extension is not specified. DO the files for reverse reads all end with `_2.fastq.gz`?' }
@@ -74,6 +83,7 @@ workflow SPLICEVIEW {
 
     ch_versions = Channel.empty()
 
+    ch_fasta = Channel.empty()
     fasta = params.fasta
     if (fasta.endsWith('.gz')) {
         ch_fasta    = GUNZIP ( [ [:], fasta ] ).gunzip.map { it[1] }
@@ -82,6 +92,7 @@ workflow SPLICEVIEW {
         ch_fasta = file(fasta)
     }
     
+    ch_gtf = Channel.empty()
     gtf = params.gtf
     if (gtf.endsWith('.gz')) {
         ch_gtf      = GUNZIP ( [ [:], gtf ] ).gunzip.map { it[1] }
