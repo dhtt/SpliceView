@@ -48,40 +48,41 @@ Start running your own analysis!
 
 #### I. Check for pipeline requirements
 ##### 1. Working directory setup
-🏠 /home/max_mustermann/.........................home directory\
-┣ 📦 SpliceView..................................pipeline directory\
-┣ 📦 TEST........................................working directory\
-┃  ┣ 🗂️ GENOMES..................................folder containing indexed genomes or reference genome FAST/GTF files \
-┃  ┃ ┗ 🗂️ mm10...................................mouse reference genome\
-┃  ┃ ┃ ┗ 🗂️ star.................................mouse genome index\
-┃  ┃ ┗ 🗂️ GRCh38.................................human reference genome\
-┃  ┃ ┃ ┃ 📄 genome.fastq.gz......................FASTA file\
-┃  ┃ ┃ ┗ 📄 genome.gtf.gz........................GTF file\
-┃  ┃ ┃\
-┃  ┣ 🗂️ INPUT....................................input folder containing all datasets\
-┃  ┃ ┗ 🗂️ testdata_1.............................input directory with reads in fastq.gz format\
-┃  ┃ ┃ ┣ 📄 test1_1.fastq.gz\
-┃  ┃ ┃ ┗ 📄 test1_2.fastq.gz\
-┃  ┃ ┗ 🗂️ testdata_2.............................input directory for another dataset\
-┃  ┃ ┃ ┣ 📄 test2_1.fastq.gz\
-┃  ┃ ┃ ┗ 📄 test2_2.fastq.gz\
-┃  ┃ ┃\
-┃  ┣ 🗂️ OUTPUT...................................output directory for all runs\
-┃  ┃ ┗ 🗂️ testdata_1.............................output directory for testdata_1\
-┃  ┃ ┃ ┣ 🗂️ cutadapt.............................Cutadapt output\
-┃  ┃ ┃ ┣ 🗂️ fastqc...............................FASTQC output\
-┃  ┃ ┃ ┣ 🗂️ genomes..............................genomes index-related output\
-┃  ┃ ┃ ┃ ┗ 🗂️ mm10\
-┃  ┃ ┃ ┃ ┃ ┗ 🗂️ star.............................generated genome index\
-┃  ┃ ┃ ┣ 🗂️ multiqc..............................MultiQC output\
-┃  ┃ ┃ ┃ ┣ 🗂️ multiqc_data\
-┃  ┃ ┃ ┃ ┗ 📄 multiqc_report.html................MultiQC report\
-┃  ┃ ┃ ┣ 🗂️ pipeline_info........................process's additional information\
-┃  ┃ ┃ ┣ 🗂️ star_align_log.......................STAR alignment logs\
-┃  ┃ ┃ ┗ 🗂️ star_align_result....................STAR alignment output\
-┃  ┃ ┃ ┃ ┣  📄 test1_T1.Aligned.sortedByCoord.out.bam\
+```
+🏠 /home/max_mustermann/.........................home directory
+┣ 📦 SpliceView..................................pipeline directory
+┣ 📦 TEST........................................working directory
+┃  ┣ 🗂️ GENOMES..................................folder containing indexed genomes or reference genome FAST/GTF files
+┃  ┃ ┗ 🗂️ mm10...................................mouse reference genome
+┃  ┃ ┃ ┗ 🗂️ star.................................mouse genome index
+┃  ┃ ┗ 🗂️ GRCh38.................................human reference genome
+┃  ┃ ┃ ┃ 📄 genome.fastq.gz......................FASTA file
+┃  ┃ ┃ ┗ 📄 genome.gtf.gz........................GTF file
+┃  ┃ ┃
+┃  ┣ 🗂️ INPUT....................................input folder containing all datasets
+┃  ┃ ┗ 🗂️ testdata_1.............................input directory with reads in fastq.gz format
+┃  ┃ ┃ ┣ 📄 test1_1.fastq.gz
+┃  ┃ ┃ ┗ 📄 test1_2.fastq.gz
+┃  ┃ ┗ 🗂️ testdata_2.............................input directory for another dataset
+┃  ┃ ┃ ┣ 📄 test2_1.fastq.gz
+┃  ┃ ┃ ┗ 📄 test2_2.fastq.gz
+┃  ┃ ┃
+┃  ┣ 🗂️ OUTPUT...................................output directory for all runs
+┃  ┃ ┗ 🗂️ testdata_1.............................output directory for testdata_1
+┃  ┃ ┃ ┣ 🗂️ cutadapt.............................Cutadapt output
+┃  ┃ ┃ ┣ 🗂️ fastqc...............................FASTQC output
+┃  ┃ ┃ ┣ 🗂️ genomes..............................genomes index-related output
+┃  ┃ ┃ ┃ ┗ 🗂️ mm10
+┃  ┃ ┃ ┃ ┃ ┗ 🗂️ star.............................generated genome index
+┃  ┃ ┃ ┣ 🗂️ multiqc..............................MultiQC output
+┃  ┃ ┃ ┃ ┣ 🗂️ multiqc_data
+┃  ┃ ┃ ┃ ┗ 📄 multiqc_report.html................MultiQC report
+┃  ┃ ┃ ┣ 🗂️ pipeline_info........................process's additional information
+┃  ┃ ┃ ┣ 🗂️ star_align_log.......................STAR alignment logs
+┃  ┃ ┃ ┗ 🗂️ star_align_result....................STAR alignment output
+┃  ┃ ┃ ┃ ┣  📄 test1_T1.Aligned.sortedByCoord.out.bam
 ┃  ┃ ┃ ┃ ┗  📄 test1_T1.Aligned.sortedByCoord.out.bam.bai
-
+```
 
 ##### 2. Mandatory arguments
 `--input`
