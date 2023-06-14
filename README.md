@@ -44,14 +44,15 @@ Download the pipeline and test it on a minimal dataset with a single command (ma
    ```
    or with minimum resources (max CPUs = 2, max memory = 8.GB)
    ```bash
-   nextflow run <ABSOLUTE_PATH_TO_SPLICEVIEW_FOLDER> -profile test_mimimum,docker --outdir <ABSOLUTE_PATH_TO_RESULT_FOLDER>
+   nextflow run <ABSOLUTE_PATH_TO_SPLICEVIEW_FOLDER> -profile test_minimum,docker --outdir <ABSOLUTE_PATH_TO_RESULT_FOLDER>
    ```
 
 
 ### Step 4
 Start running your own analysis!
 
-----
+
+
 #### I. Check for pipeline requirements
 ##### 1. Working directory setup
 
@@ -162,7 +163,9 @@ Start running your own analysis!
  `--max_memory`
  - Maximum memory that can be assigned to the process. Default:  _--max_memory 8.GB_ in `test_minimum` profile; _--max_memory 128.GB_ in `test` profile
 
-----
+
+
+
 #### II. Run pipeline
 ##### 1. OPTION 1
 Download and use FASTA/GTF reference genome files from iGenome for genome indexing:
@@ -216,7 +219,8 @@ nextflow run <ABSOLUTE_PATH_TO_SPLICEVIEW_FOLDER>\     # /home/max_mustermann/Sp
 > **Note** 
 > `--genome` must be defined when `--star_index` is used
 
-----
+
+
 #### III. PIPELINE RESULTS
 The ouputs include the following folders: \
 - `cutadapt`: Cutadapt output including trimmed reads and report are stored in this folder.\
@@ -227,10 +231,33 @@ The ouputs include the following folders: \
 - `star_align_log`: Additional information about the STAR alignment\
 - `star_align_result`: **Main results** of the pipeline are stored in in .BAM and .BAI format
 
-----
+
+
 #### IV. TROUBLESHOOTING
-- Depends on user's resources, the number of maximum CPUs and maximum memory can be adjusted. The default in `test` profile uses 20 CPUs and 128GB memory, while `test_minimum` uses 2 CPUs and 8GB memory. Users can manually adjust these parameters by adding `--max_cpus ` and `--max_memory` arguments in the command line.
-- Some extra STAR-alignment arguments must be adjusted depending on available memory for successful run. For example `--limitGenomeGenerateRAM` (see [issue](https://github.com/alexdobin/STAR/issues/129)). To add extra arguments to STAR alignment, see `--extra_star_align_args`
+
+⭐️ The pipeline could be re-run with modified parameters reduce the runtime of the new process. Simply follow these steps:\
+1. Run the command to get a report of recent processes
+```bash
+nextflow log
+```
+
+```bash
+OUTPUT:
+TIMESTAMP           DURATION    RUN NAME            STATUS  REVISION ID SESSION ID                              COMMAND                   
+2023-06-14 12:20:47     -               furious_mcnulty         -       e1508873c9      8855cf37-826f-4a31-b960-e44d3a881954    nextflow run ./SpliceView --outdir ./TEST/OUTPUT/est_data1 -profile docker,test
+2023-06-14 12:24:22     2m 45s          desperate_blackwell     OK      68da96b1f7      94f82489-c6a5-41ac-a6a7-9058436b1089    nextflow run ./SpliceView --outdir ./TEST/OUTPUT/est_data1 -profile docker,test
+```
+
+2. Add the `-resume` argument to the new command line with the **session ID** of the process you wish to resume.\
+**Example:** 
+```bash
+nextflow run <ABSOLUTE_PATH_TO_SPLICEVIEW_FOLDER> -profile test,docker  --outdir <ABSOLUTE_PATH_TO_RESULT_FOLDER> -resume 8855cf37-826f-4a31-b960-e44d3a881954
+```
+
+⭐️ Depends on user's resources, the number of maximum CPUs and maximum memory can be adjusted. The default in `test` profile uses 20 CPUs and 128GB memory, while `test_minimum` uses 2 CPUs and 8GB memory. Users can manually adjust these parameters by adding `--max_cpus ` and `--max_memory` arguments in the command line.
+
+⭐️ Some extra STAR-alignment arguments must be adjusted depending on available memory for successful run. For example `--limitGenomeGenerateRAM` (see [issue](https://github.com/alexdobin/STAR/issues/129)). To add extra arguments to STAR alignment, see `--extra_star_align_args`
+
 
 ## Credits
 
@@ -251,8 +278,3 @@ This pipeline uses code and infrastructure developed and maintained by the [nf-c
 > Philip Ewels, Alexander Peltzer, Sven Fillinger, Harshil Patel, Johannes Alneberg, Andreas Wilm, Maxime Ulysse Garcia, Paolo Di Tommaso & Sven Nahnsen.
 >
 > _Nat Biotechnol._ 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).
-
-<div style="background-color:orange;">
-**Heading**
-{: .panel-heading}
-</div>
