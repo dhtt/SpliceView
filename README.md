@@ -51,8 +51,10 @@ Download the pipeline and test it on a minimal dataset with a single command (ma
 ### Step 4
 Start running your own analysis!
 
+----
 #### I. Check for pipeline requirements
 ##### 1. Working directory setup
+
 ```
 🏠 /home/max_mustermann/.........................home directory
 ┣ 📦 SpliceView..................................pipeline directory
@@ -112,8 +114,7 @@ Start running your own analysis!
 > **Note** 
 > Defining `--genome` will download and use the reference genome from iGenome database. 
 > If you wish to use an existing version of the reference genome, please define `--fasta` **and** `--gtf` and do not include `--genome` in the command line. 
-
-See [here](#####1.-OPTION-1) and [here](#####-3.-OPTION-3)
+> See [here](https://github.com/dhtt/SpliceView#1-option-1) and [here](https://github.com/dhtt/SpliceView#3-option-3)
 
 
 `--fasta`
@@ -147,7 +148,7 @@ See [here](#####1.-OPTION-1) and [here](#####-3.-OPTION-3)
 
 `--extra_star_align_args`
 - Extra arguments to pass to STAR alignment that can be found [here](https://physiology.med.cornell.edu/faculty/skrabanek/lab/angsd/lecture_notes/STARmanual.pdf)\
-**Example:** _--outSAMtype BAM SortedByCoordinate --readFilesCommand gunzip -c_ 
+**Example:** _--outSAMtype BAM SortedByCoordinate --readFilesCommand gunzip -c --limitGenomeGenerateRAM=124544990592_ 
 
 
 `--fastq_dir_to_samplesheet_args`
@@ -155,6 +156,13 @@ See [here](#####1.-OPTION-1) and [here](#####-3.-OPTION-3)
 **Example:** _--single_end true --recursive true_
 
 
+ `--max_cpus` 
+ - Number of maximum CPUs that can be assigned to the process. Default:  _--max_cpus 2_ in `test_minimum` profile;  _--max_cpus 20_ in `test` profile
+ 
+ `--max_memory`
+ - Maximum memory that can be assigned to the process. Default:  _--max_memory 8.GB_ in `test_minimum` profile; _--max_memory 128.GB_ in `test` profile
+
+----
 #### II. Run pipeline
 ##### 1. OPTION 1
 Download and use FASTA/GTF reference genome files from iGenome for genome indexing:
@@ -208,21 +216,25 @@ nextflow run <ABSOLUTE_PATH_TO_SPLICEVIEW_FOLDER>\     # /home/max_mustermann/Sp
 > **Note** 
 > `--genome` must be defined when `--star_index` is used
 
-
+----
 #### III. PIPELINE RESULTS
 The ouputs include the following folders: \
-`cutadapt`: Cutadapt output including trimmed reads and report are stored in this folder.\
-`fastqc`: FastQC output for generated reads\
-`genomes`: Indexed reference genome by STAR that can be reused for another run with different datasets. The index is stored in _genomes/<NAME_OF_GENOME>/star_ folder\
-`multiqc`: MultiQC final report is stored here in .html format\
-`pipeline_info`: Additional information about the current run\
-`star_align_log`: Additional information about the STAR alignment\
-`star_align_result`: **Main results** of the pipeline are stored in in .BAM and .BAI format
+- `cutadapt`: Cutadapt output including trimmed reads and report are stored in this folder.\
+- `fastqc`: FastQC output for generated reads\
+- `genomes`: Indexed reference genome by STAR that can be reused for another run with different datasets. The index is stored in _genomes/<NAME_OF_GENOME>/star_ folder\
+- `multiqc`: MultiQC final report is stored here in .html format\
+- `pipeline_info`: Additional information about the current run\
+- `star_align_log`: Additional information about the STAR alignment\
+- `star_align_result`: **Main results** of the pipeline are stored in in .BAM and .BAI format
 
+----
+#### IV. TROUBLESHOOTING
+- Depends on user's resources, the number of maximum CPUs and maximum memory can be adjusted. The default in `test` profile uses 20 CPUs and 128GB memory, while `test_minimum` uses 2 CPUs and 8GB memory. Users can manually adjust these parameters by adding `--max_cpus ` and `--max_memory` arguments in the command line.
+- Some extra STAR-alignment arguments must be adjusted depending on available memory for successful run. For example `--limitGenomeGenerateRAM` (see [issue](https://github.com/alexdobin/STAR/issues/129)). To add extra arguments to STAR alignment, see `--extra_star_align_args`
 
 ## Credits
 
-zbi/spliceview was originally written by Trang Do.
+zbi/spliceview was originally written by [Trang Do](https://github.com/dhtt).
 
 ## Contributions and Support
 
@@ -239,3 +251,8 @@ This pipeline uses code and infrastructure developed and maintained by the [nf-c
 > Philip Ewels, Alexander Peltzer, Sven Fillinger, Harshil Patel, Johannes Alneberg, Andreas Wilm, Maxime Ulysse Garcia, Paolo Di Tommaso & Sven Nahnsen.
 >
 > _Nat Biotechnol._ 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).
+
+<div style="background-color:orange;">
+**Heading**
+{: .panel-heading}
+</div>
