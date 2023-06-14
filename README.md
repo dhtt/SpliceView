@@ -37,11 +37,16 @@ Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#install
 Install any of [`Docker`](https://docs.docker.com/engine/installation/), [`Singularity`](https://www.sylabs.io/guides/3.0/user-guide/) (you can follow [this tutorial](https://singularity-tutorial.github.io/01-installation/)), [`Podman`](https://podman.io/), [`Shifter`](https://nersc.gitlab.io/development/shifter/how-to-use/) or [`Charliecloud`](https://hpc.github.io/charliecloud/) for full pipeline reproducibility _(you can use [`Conda`](https://conda.io/miniconda.html) both to install Nextflow itself and also to manage software within pipelines. Please only use it within pipelines as a last resort; see [docs](https://nf-co.re/usage/configuration#basic-configuration-profiles))_.
 
 ### Step 3
-Download the pipeline and test it on a minimal dataset with a single command:
+Download the pipeline and test it on a minimal dataset with a single command (max CPUs = 20, max memory = 128.GB):
 
    ```bash
-   nextflow run zbi/spliceview -profile test,docker 
+   nextflow run <ABSOLUTE_PATH_TO_SPLICEVIEW_FOLDER> -profile test,docker  --outdir <ABSOLUTE_PATH_TO_RESULT_FOLDER>
    ```
+   or with minimum resources (max CPUs = 2, max memory = 8.GB)
+   ```bash
+   nextflow run <ABSOLUTE_PATH_TO_SPLICEVIEW_FOLDER> -profile test_mimimum,docker --outdir <ABSOLUTE_PATH_TO_RESULT_FOLDER>
+   ```
+
 
 ### Step 4
 Start running your own analysis!
@@ -67,7 +72,7 @@ Start running your own analysis!
 ┃  ┃ ┃ ┣ 📄 test2_1.fastq.gz
 ┃  ┃ ┃ ┗ 📄 test2_2.fastq.gz
 ┃  ┃ ┃
-┃  ┣ 🗂️ OUTPUT...................................output directory for all runs
+┃  ┣ 🗂️ OUTPUT...................................output folder for all datasets
 ┃  ┃ ┗ 🗂️ testdata_1.............................output directory for testdata_1
 ┃  ┃ ┃ ┣ 🗂️ cutadapt.............................Cutadapt output
 ┃  ┃ ┃ ┣ 🗂️ fastqc...............................FASTQC output
@@ -86,61 +91,68 @@ Start running your own analysis!
 
 ##### 2. Mandatory arguments
 `--input`
-- [ ] The full path to the folder where fastq-files are stored. 
-**For example:** With the above folder structure, `--input` is _/home/max_mustermann/TEST/INPUT/testdata_1_   
+- [ ] The full path to the folder where fastq-files are stored.\
+**Example:** With the above folder structure, `--input` is _/home/max_mustermann/TEST/INPUT/testdata_1_   
 - [ ] All fastq-files should be compressed and end with **.gz**. You can use `gzip file.fastq` command to compress a .fastq files. 
-- [ ] For paired-end fastq-files in `--input` folder, forward reads must end with **_1.fastq.gz** and reverse reads must end with **_2.fastq.gz**. 
-
-💡 Example: For a paired-end sample WT with 2 replicates, the files should be named: for 
+- [ ] For paired-end fastq-files in `--input` folder, forward reads must end with **_1.fastq.gz** and reverse reads must end with **_2.fastq.gz**. \
+**Example:** : For a paired-end sample WT with 2 replicates, the files should be named: for 
    - Replicate 1: _WT_Rep1_1.fastq.gz_ and _WT_Rep1_2.fastq.gz_ 
    - Replicate 2: _WT_Rep2_1.fastq.gz_ and _WT_Rep2_2.fastq.gz_
 
 
 `--outdir`
-- [ ] The full path to the folder where all outputs and logs are stored. 
-**For example:** With the above folder structure, `--outdir` is _/home/max_mustermann/TEST/OUTPUT/testdata_1_  
+- [ ] The full path to the folder where all outputs and logs are stored.\
+**Example:** With the above folder structure, `--outdir` is _/home/max_mustermann/TEST/OUTPUT/testdata_1_  
 
 
 `--genome`
-- [ ] The reference genome used for STAR genome indexing and STAR alignment. 
-**For example:** The reference genome options for human is **GRCh38** or **GRCh37**, and for mouse is **mm10**.\
-❗️ Defining `--genome` will download and use the reference genome from iGenome database. If you wish to use an existing version of the reference genome, please define `--fasta` **and** `--gtf` and do not include `--genome` in the command line. See [here](#####1.-OPTION-1) and [here](#####3.-OPTION-3)
+- [ ] The reference genome used for STAR genome indexing and STAR alignment.\
+**Example:** The reference genome options for human is **GRCh38** or **GRCh37**, and for mouse is **mm10**.
+
+> **Note** 
+> Defining `--genome` will download and use the reference genome from iGenome database. 
+> If you wish to use an existing version of the reference genome, please define `--fasta` **and** `--gtf` and do not include `--genome` in the command line. 
+
+See [here](#####1.-OPTION-1) and [here](#####-3.-OPTION-3)
 
 
 `--fasta`
-- [ ] The reference genome FASTA file used for STAR genome indexing and STAR alignment **UNLESS** `--genome` is defined (see `--genome`). 
-**For example:** The path to FASTA file in the above folder structure is _/home/max_mustermann/TEST/GENOMES/GRCh38/genome.fastq.gz_ 
-- [ ] `--fasta` must be declared together with `--gtf`
+- [ ] The reference genome FASTA file used for STAR genome indexing and STAR alignment **UNLESS** `--genome` is defined (see `--genome`).\
+**Example:** The path to FASTA file in the above folder structure is _/home/max_mustermann/TEST/GENOMES/GRCh38/genome.fastq.gz_ 
+> **Note** `--fasta` must be declared together with `--gtf`
 
 
 `--gtf`
-- [ ] The reference genome GTF file used for STAR genome indexing and STAR alignment **UNLESS** `--genome` is defined (see `--genome`). 
-**For example:** The path to GTF file in the above folder structure is _/home/max_mustermann/TEST/GENOMES/GRCh38/genome.gtf.gz_
-- [ ] `--gtf` must be declared together with `--fasta`
+- [ ] The reference genome GTF file used for STAR genome indexing and STAR alignment **UNLESS** `--genome` is defined (see `--genome`).\
+**Example:** The path to GTF file in the above folder structure is _/home/max_mustermann/TEST/GENOMES/GRCh38/genome.gtf.gz_
+> **Note** `--gtf` must be declared together with `--fasta`. See `--fasta`
 
 
 `-profile` 
 - [ ] Use **docker** as default, unless Singularity or other \
-❗️ There is only one hyphen (-) in front of this parameter, while all other require two hyphens (--)
+> **Warning** 
+> There is only one hyphen (-) in front of this parameter, while all other require two hyphens (--)
 
 ##### 3. Optional arguments
 `--star_index` 
 - Path to the folder containing a prebuilt/generated genome index. This parameter can be used when a specific genome index has been created successfully from a previous run. 
 - Using `--star_index` speeds up the process significantly as genome indexing step  requires extensive time and memory (For test data, `--star_index` can reduce run time from 1 hour to 5 minutes). 
 
-💡 Example: The path to genome index in the above folder structure is _/home/max_mustermann/TEST/GENOMES/mm10/star_. This genome index is generated from previous run using the 'mm10' mouse reference genome, which is intially stored in _/home/max_mustermann/TEST/OUTPUT/testdata_1/genomes/mm10/star_ \
-❗️ It is highly recommended to copy the genome index to a folder such as _/home/max_mustermann/TEST/GENOMES/_ once it is generated successfully from a run for **reusing** purpose.\
-❗️ `--genome` must be defined when `--star_index` is used
+**Example:** The path to genome index in the above folder structure is _/home/max_mustermann/TEST/GENOMES/mm10/star_. This genome index is generated from previous run using the 'mm10' mouse reference genome, which is intially stored in _/home/max_mustermann/TEST/OUTPUT/testdata_1/genomes/mm10/star_ 
+> **Note** 
+> It is highly recommended to copy the genome index to a folder such as _/home/max_mustermann/TEST/GENOMES/_ once it is generated successfully from a run for **reusing** purpose.
+>
+> `--genome` must be defined when `--star_index` is used
 
 
 `--extra_star_align_args`
-- Extra arguments to pass to STAR alignment that can be found [here](https://physiology.med.cornell.edu/faculty/skrabanek/lab/angsd/lecture_notes/STARmanual.pdf)
-💡 Example: _--outSAMtype BAM SortedByCoordinate --readFilesCommand gunzip -c_ 
+- Extra arguments to pass to STAR alignment that can be found [here](https://physiology.med.cornell.edu/faculty/skrabanek/lab/angsd/lecture_notes/STARmanual.pdf)\
+**Example:** _--outSAMtype BAM SortedByCoordinate --readFilesCommand gunzip -c_ 
 
 
 `--fastq_dir_to_samplesheet_args`
-- Extra arguments to pass to fastq_dir_to_samplesheet.py to prepare samplesheet for Nextflow pipeline that can be found [here](https://github.com/nf-core/rnaseq/blob/master/bin/fastq_dir_to_samplesheet.py)
-💡 Example: _--single_end true --recursive true_
+- Extra arguments to pass to fastq_dir_to_samplesheet.py to prepare samplesheet for Nextflow pipeline that can be found [here](https://github.com/nf-core/rnaseq/blob/master/bin/fastq_dir_to_samplesheet.py)\
+**Example:** _--single_end true --recursive true_
 
 
 #### II. Run pipeline
@@ -153,10 +165,12 @@ nextflow run <ABSOLUTE_PATH_TO_SPLICEVIEW_FOLDER>\  # /home/max_mustermann/Splic
    --genome <NAME_OF_REFERENCE_GENOME>\             # mm10
    -profile docker
 ```
-<sup>* Please make sure there is no empty space behind the slash ( **\\** ) at the end of each line and remove the comments (#comment)</sup>
+> **Warning**
+>
+> <sup> Please make sure there is no empty space behind the slash ( **\\** ) at the end of each line and remove the comments (#comment)</sup>
 
-Note:
-- `--genome` must be defined for downloading the reference genome from iGenome database
+> **Note** 
+> `--genome` must be defined for downloading the reference genome from iGenome database
 
 
 ##### 2. OPTION 2
@@ -169,10 +183,12 @@ nextflow run <ABSOLUTE_PATH_TO_SPLICEVIEW_FOLDER>\  # /home/max_mustermann/Splic
    --gtf <ABSOLUTE_PATH_TO_GTF_FILE>\               # /home/max_mustermann/TEST/GENOMES/GRCh38/genome.gtf.gz
    -profile docker
 ```
-<sup>* Please make sure there is no empty space behind the slash ( **\\** ) at the end of each line and remove the comments (#comment)</sup>
+> **Warning**
+>
+> <sup> Please make sure there is no empty space behind the slash ( **\\** ) at the end of each line and remove the comments (#comment)</sup>
 
-Note:
-- `--fasta` *and* `--gtf` must be defined while `--genome` is not provided
+> **Note** 
+> `--fasta` *and* `--gtf` must be defined while `--genome` is not provided
 
 
 ##### 3. OPTION 3
@@ -185,10 +201,12 @@ nextflow run <ABSOLUTE_PATH_TO_SPLICEVIEW_FOLDER>\     # /home/max_mustermann/Sp
    --star_index <ABSOLUTE_PATH_TO_STAR_INDEX_FOLDER>\  # /home/max_mustermann/TEST/GENOMES/mm10/star
    -profile docker
 ```
-<sup>* Please make sure there is no empty space behind the slash ( **\\** ) at the end of each line and remove the comments (#comment)</sup>
+> **Warning**
+>
+> <sup> Please make sure there is no empty space behind the slash ( **\\** ) at the end of each line and remove the comments (#comment)</sup>
 
-Note:
-- `--genome` must be defined when `--star_index` is used
+> **Note** 
+> `--genome` must be defined when `--star_index` is used
 
 
 #### III. PIPELINE RESULTS

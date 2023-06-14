@@ -22,7 +22,7 @@ if (!params.genome){
 }
 else {
     // If both reference genome for iGenome download and FASTA/GTF files are provided, give warning for using iGenome version
-    if (params.fasta && params.gtf){ printf('Both reference genome for iGenome download and user-defined paths to FASTA/GTF exist. Please define only `genome` parameter to use iGenome version, or `fasta` and `gtf` parameters to define paths to user`s reference genome files. Now using reference genome version from iGenome') }
+    if (params.fasta && params.gtf){ printf('Using reference genome version from iGenome') }
 }
 
 if (params.input) { ch_input = Channel.of(file(params.input)) } else { exit 1, 'Path to folder containing fastq.gz files is not specified!' }
