@@ -40,7 +40,7 @@ Install any of [`Docker`](https://docs.docker.com/engine/installation/), [`Singu
 Download the pipeline and test it on a minimal dataset with a single command:
 
    ```bash
-   nextflow run zbi/spliceview -profile test,docker
+   nextflow run zbi/spliceview -profile test,docker 
    ```
 
 ### Step 4
@@ -98,7 +98,7 @@ Start running your own analysis!
 
 `--outdir`
 - [ ] The full path to the folder where all outputs and logs are stored. 
-**For example:** With the above folder structure, `--outdir` is _/home/max_mustermann/TEST/OUTPUT_  
+**For example:** With the above folder structure, `--outdir` is _/home/max_mustermann/TEST/OUTPUT/testdata_1_  
 
 
 `--genome`
@@ -120,7 +120,7 @@ Start running your own analysis!
 
 
 `-profile` 
-- [ ] Always use **docker** as --profile\
+- [ ] Use **docker** as default, unless Singularity or other \
 ❗️ There is only one hyphen (-) in front of this parameter, while all other require two hyphens (--)
 
 ##### 3. Optional arguments
@@ -128,7 +128,7 @@ Start running your own analysis!
 - Path to the folder containing a prebuilt/generated genome index. This parameter can be used when a specific genome index has been created successfully from a previous run. 
 - Using `--star_index` speeds up the process significantly as genome indexing step  requires extensive time and memory (For test data, `--star_index` can reduce run time from 1 hour to 5 minutes). 
 
-💡 Example: The path to genome index in the above folder structure is _/home/max_mustermann/TEST/GENOMES/mm10/star_. This genome index is generated from previous run using the 'mm10' mouse reference genome, which is intially stored in _/home/max_mustermann/TEST/OUTPUT/genomes/mm10/star_ \
+💡 Example: The path to genome index in the above folder structure is _/home/max_mustermann/TEST/GENOMES/mm10/star_. This genome index is generated from previous run using the 'mm10' mouse reference genome, which is intially stored in _/home/max_mustermann/TEST/OUTPUT/testdata_1/genomes/mm10/star_ \
 ❗️ It is highly recommended to copy the genome index to a folder such as _/home/max_mustermann/TEST/GENOMES/_ once it is generated successfully from a run for **reusing** purpose.\
 ❗️ `--genome` must be defined when `--star_index` is used
 
@@ -149,7 +149,7 @@ Download and use FASTA/GTF reference genome files from iGenome for genome indexi
 ```bash
 nextflow run <ABSOLUTE_PATH_TO_SPLICEVIEW_FOLDER>\  # /home/max_mustermann/Spliceview
    --input <ABSOLUTE_PATH_TO_FASTQ_FILES_FOLDER>\   # /home/max_mustermann/TEST/INPUT/testdata_1
-   --outdir <ABSOLUTE_PATH_TO_RESULT_FOLDER>\       # /home/max_mustermann/TEST/OUTPUT
+   --outdir <ABSOLUTE_PATH_TO_RESULT_FOLDER>\       # /home/max_mustermann/TEST/OUTPUT/testdata_1
    --genome <NAME_OF_REFERENCE_GENOME>\             # mm10
    -profile docker
 ```
@@ -164,7 +164,7 @@ Use self-defined/existing FASTA/GTF reference genome files for genome indexing:
 ```bash
 nextflow run <ABSOLUTE_PATH_TO_SPLICEVIEW_FOLDER>\  # /home/max_mustermann/Spliceview
    --input <ABSOLUTE_PATH_TO_FASTQ_FILES_FOLDER>\   # /home/max_mustermann/TEST/INPUT/testdata_1
-   --outdir <ABSOLUTE_PATH_TO_RESULT_FOLDER>\       # /home/max_mustermann/TEST/OUTPUT
+   --outdir <ABSOLUTE_PATH_TO_RESULT_FOLDER>\       # /home/max_mustermann/TEST/OUTPUT/testdata_1
    --fasta <ABSOLUTE_PATH_TO_FASTA_FILE>\           # /home/max_mustermann/TEST/GENOMES/GRCh38/genome.fastq.gz
    --gtf <ABSOLUTE_PATH_TO_GTF_FILE>\               # /home/max_mustermann/TEST/GENOMES/GRCh38/genome.gtf.gz
    -profile docker
@@ -180,7 +180,7 @@ Use a previously generated genome index and skip STAR indexing (less time-consum
 ```bash
 nextflow run <ABSOLUTE_PATH_TO_SPLICEVIEW_FOLDER>\     # /home/max_mustermann/Spliceview
    --input <ABSOLUTE_PATH_TO_FASTQ_FILES_FOLDER>\      # /home/max_mustermann/TEST/INPUT/testdata_1
-   --outdir <ABSOLUTE_PATH_TO_RESULT_FOLDER>\          # /home/max_mustermann/TEST/OUTPUT
+   --outdir <ABSOLUTE_PATH_TO_RESULT_FOLDER>\          # /home/max_mustermann/TEST/OUTPUT/testdata_1
    --genome <NAME_OF_REFERENCE_GENOME>\                # mm10
    --star_index <ABSOLUTE_PATH_TO_STAR_INDEX_FOLDER>\  # /home/max_mustermann/TEST/GENOMES/mm10/star
    -profile docker
