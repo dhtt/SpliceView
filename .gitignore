@@ -8,3 +8,4 @@ testing*
 *.pyc
 *.html
 *.txt
+assets/testdata/samplesheet*
